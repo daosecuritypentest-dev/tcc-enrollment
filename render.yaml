@@ -1,0 +1,6 @@
+services:
+  - type: web
+    runtime: static
+    name: enrollment-system
+    buildCommand: 'true' # no build step needed; Render just uploads the files
+    staticPublishPath: .

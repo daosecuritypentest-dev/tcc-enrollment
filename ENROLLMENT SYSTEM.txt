@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junior High School Multi-Portal System</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117;
+            color: #f0f6fc;
+        }
+
+        .portal-card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .dark-input {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            color: #e6edf3;
+            transition: all 0.2s ease;
+        }
+
+        .dark-input:focus {
+            border-color: #58a6ff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+        }
+
+        .notice-box {
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+        }
+
+        .recaptcha-box {
+            background-color: #f9f9f9;
+            color: #000000;
+            border: 1px solid #d3d3d3;
+            border-radius: 4px;
+        }
+
+        /* Interactive Selection Cards */
+        .grade-card {
+            background-color: #0d1117;
+            border: 2px solid #30363d;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .grade-card:hover {
+            border-color: #58a6ff;
+            transform: translateY(-2px);
+        }
+
+        .grade-card.selected {
+            background-color: rgba(37, 99, 235, 0.15);
+            border-color: #3b82f6;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 4px;
+        }
+
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between items-center p-4 sm:p-6 pb-28">
+
+    <!-- TOP HEADER -->
+    <header class="w-full max-w-md mx-auto text-center my-3">
+        <div class="flex items-center justify-center gap-3 mb-1">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-blue-900/30">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div class="text-left">
+                <h1 class="text-sm font-extrabold tracking-tight text-white leading-tight">TORRES CAPITOL COLLEGE, INC.</h1>
+                <p class="text-[10px] font-semibold text-blue-400 tracking-wider">JUNIOR HIGH SCHOOL PORTAL SYSTEM</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN APP WRAPPER -->
+    <main class="w-full max-w-md mx-auto my-auto">
+
+        <!-- ========================================== -->
+        <!-- VIEW 0: CENTRAL PORTAL SELECTOR HUB        -->
+        <!-- ========================================== -->
+        <section id="view-hub" class="portal-card p-6 space-y-4">
+            <div class="text-center border-b border-gray-800 pb-3">
+                <h2 class="text-lg font-bold text-white">Portal Navigation Hub</h2>
+                <p class="text-xs text-gray-400 mt-0.5">Select your access role to proceed</p>
+            </div>
+
+            <div class="space-y-2.5">
+                <button onclick="switchView('view-enrollment')" class="w-full bg-emerald-600/90 hover:bg-emerald-600 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-between text-xs shadow-md">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-file-pen"></i> New Student (Enrollment Form)</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+
+                <button onclick="switchView('view-login')" class="w-full bg-blue-600/90 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-between text-xs shadow-md">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-right-to-bracket"></i> Enrolled Student Portal (Login)</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+
+                <button onclick="switchView('view-teacher-login')" class="w-full bg-amber-600/90 hover:bg-amber-600 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-between text-xs shadow-md">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-chalkboard-user"></i> Teacher Portal (Advisory Records)</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+
+                <button onclick="switchView('view-principal-login')" class="w-full bg-purple-600/90 hover:bg-purple-600 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-between text-xs shadow-md">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-shield-halved"></i> Principal Portal (Master Access)</span>
+                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- VIEW 1: ENROLLMENT FORM                    -->
+        <!-- ========================================== -->
+        <section id="view-enrollment" class="portal-card p-6 space-y-4 hidden">
+            <div class="border-b border-gray-800 pb-3 flex items-center justify-between">
+                <div>
+                    <h2 class="text-base font-bold text-white">Student Enrollment Form</h2>
+                    <p class="text-[11px] text-gray-400">Academic Year 2026-2027</p>
+                </div>
+                <button onclick="switchView('view-hub')" class="text-xs text-blue-400 hover:underline"><i class="fa-solid fa-house"></i> Hub</button>
+            </div>
+
+            <form id="enrollment-form" onsubmit="handleEnrollmentSubmit(event)" class="space-y-4">
+
+                <!-- SELECT GRADE LEVEL (4 ORGANIZED BOXES) -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-200 uppercase tracking-wider mb-2">
+                        1. Select Grade Level <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="hidden" id="selected-grade-input" required>
+
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div id="card-grade7" onclick="selectGradeCard('Grade 7')" class="grade-card p-3 text-center">
+                            <i class="fa-solid fa-user-graduate text-blue-400 text-lg mb-1"></i>
+                            <h3 class="text-xs font-bold text-white leading-tight">GRADE 7</h3>
+                            <p class="text-[9px] text-gray-400 mt-0.5">Freshmen</p>
+                        </div>
+
+                        <div id="card-grade8" onclick="selectGradeCard('Grade 8')" class="grade-card p-3 text-center">
+                            <i class="fa-solid fa-book-bookmark text-emerald-400 text-lg mb-1"></i>
+                            <h3 class="text-xs font-bold text-white leading-tight">GRADE 8</h3>
+                            <p class="text-[9px] text-gray-400 mt-0.5">Sophomore</p>
+                        </div>
+
+                        <div id="card-grade9" onclick="selectGradeCard('Grade 9')" class="grade-card p-3 text-center">
+                            <i class="fa-solid fa-flask text-amber-400 text-lg mb-1"></i>
+                            <h3 class="text-xs font-bold text-white leading-tight">GRADE 9</h3>
+                            <p class="text-[9px] text-gray-400 mt-0.5">Junior</p>
+                        </div>
+
+                        <div id="card-grade10" onclick="selectGradeCard('Grade 10')" class="grade-card p-3 text-center">
+                            <i class="fa-solid fa-award text-purple-400 text-lg mb-1"></i>
+                            <h3 class="text-xs font-bold text-white leading-tight">GRADE 10</h3>
+                            <p class="text-[9px] text-gray-400 mt-0.5">Senior Completer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GRADE 7 ADMISSION REQUIREMENTS (ATTACHMENTS) -->
+                <div id="grade-7-requirements-section" class="notice-box p-3.5 space-y-3 border-l-4 border-l-purple-500 hidden">
+                    <div class="flex items-center justify-between border-b border-gray-700 pb-2">
+                        <span class="text-xs font-bold text-purple-300 flex items-center gap-1.5">
+                            <i class="fa-solid fa-folder-closed"></i> Grade 7 Admission Requirements
+                        </span>
+                        <span class="text-[9px] bg-purple-900/60 text-purple-300 border border-purple-700/50 px-2 py-0.5 rounded-full font-semibold">Mandatory</span>
+                    </div>
+
+                    <p class="text-[10px] text-gray-300 leading-relaxed">
+                        Please upload clear scanned photos of the 4 required document credentials:
+                    </p>
+
+                    <!-- Requirements Grid -->
+                    <div class="grid grid-cols-2 gap-2 text-[10px] text-gray-300">
+                        <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex items-center gap-1.5">
+                            <i class="fa-solid fa-certificate text-amber-400"></i> Birth Certificate
+                        </div>
+                        <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-cat text-blue-400"></i> Good Moral
+                        </div>
+                        <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-invoice text-emerald-400"></i> Form 137 / SF10
+                        </div>
+                        <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex items-center gap-1.5">
+                            <i class="fa-solid fa-clipboard-check text-rose-400"></i> Report Card
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-200 mb-1">Attach Requirement Photo Files</label>
+                        <input type="file" id="grade7-req-photos" accept="image/*" multiple class="w-full dark-input p-2 rounded-xl text-xs file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- PERSONAL DATA FIELDS -->
+                <div class="space-y-3 pt-1">
+                    <label class="block text-xs font-bold text-gray-200 uppercase tracking-wider">
+                        2. Student Information
+                    </label>
+
+                    <div>
+                        <label class="block text-[11px] font-medium text-gray-300 mb-1">Student Profile Photo</label>
+                        <input type="file" id="student-photo" accept="image/*" required class="w-full dark-input p-2 rounded-xl text-xs file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-medium text-gray-300 mb-1">Full Name (First, Middle, Last)</label>
+                        <input type="text" id="student-name" required placeholder="e.g. Juan A. Dela Cruz" class="w-full dark-input p-2.5 rounded-xl text-xs">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-medium text-gray-300 mb-1">Student ID / LRN Number</label>
+                        <input type="text" id="student-lrn" required placeholder="12-digit LRN Number" class="w-full dark-input p-2.5 rounded-xl text-xs">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-medium text-gray-300 mb-1">Student Email Address (Login Username)</label>
+                        <input type="email" id="student-email" required placeholder="student@gmail.com" class="w-full dark-input p-2.5 rounded-xl text-xs">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-medium text-gray-300 mb-1">Contact Number</label>
+                        <input type="tel" id="student-contact" required placeholder="09123456789" class="w-full dark-input p-2.5 rounded-xl text-xs">
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-medium text-gray-300 mb-1">Parent / Guardian Name & Contact</label>
+                        <input type="text" id="parent-contact" required placeholder="Maria Dela Cruz (09987654321)" class="w-full dark-input p-2.5 rounded-xl text-xs">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl transition duration-200 shadow-lg shadow-emerald-900/30 flex items-center justify-center gap-2 text-xs uppercase tracking-wider mt-3">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Enrollment
+                </button>
+            </form>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: STUDENT LOGIN                      -->
+        <!-- ========================================== -->
+        <section id="view-login" class="portal-card p-6 space-y-4 hidden">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <div>
+                    <h2 class="text-base font-bold text-white tracking-tight">Portal Access</h2>
+                    <p class="text-[11px] text-gray-400">Please log in to continue.</p>
+                </div>
+                <button onclick="switchView('view-hub')" class="text-xs text-blue-400 hover:underline"><i class="fa-solid fa-house"></i> Hub</button>
+            </div>
+
+            <div class="notice-box p-3 flex items-start gap-3">
+                <i class="fa-solid fa-shield-halved text-gray-300 text-sm mt-0.5"></i>
+                <div>
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider">Authorized Access Only</h3>
+                    <p class="text-[10px] text-gray-400 mt-0.5 leading-relaxed">
+                        This portal is exclusively for TCCI Enrolled Students. Enter your registered email to check status.
+                    </p>
+                </div>
+            </div>
+
+            <form id="login-form" onsubmit="handleLoginSubmit(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-medium text-gray-300 mb-1">Email or ID Number</label>
+                    <input type="text" id="login-email" required placeholder="e.g. student@gmail.com" class="w-full dark-input p-3 rounded-xl text-xs">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-300 mb-1">Password</label>
+                    <div class="relative">
+                        <input type="password" id="login-pass" required placeholder="Enter your password" value="password123" class="w-full dark-input p-3 pr-10 rounded-xl text-xs">
+                        <button type="button" onclick="togglePasswordVisibility('login-pass', 'pass-icon')" class="absolute right-3 top-3 text-gray-400 hover:text-white">
+                            <i id="pass-icon" class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="recaptcha-box p-2.5 flex items-center justify-between shadow-sm my-1">
+                    <label class="flex items-center gap-2.5 cursor-pointer">
+                        <input type="checkbox" id="captcha-check" required class="w-4 h-4 rounded border-gray-400 text-blue-600 focus:ring-0">
+                        <span class="text-[11px] font-medium text-gray-700">I'm not a robot</span>
+                    </label>
+                    <div class="flex flex-col items-center">
+                        <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA" class="w-4 h-4">
+                        <span class="text-[7px] text-gray-500 mt-0.5">reCAPTCHA</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-white hover:bg-gray-200 text-slate-900 font-bold py-3 px-4 rounded-xl transition duration-200 uppercase text-xs tracking-wider shadow-md">
+                    LOG IN
+                </button>
+            </form>
+
+            <div class="text-center pt-1">
+                <p class="text-xs text-gray-400">
+                    No account yet? <button onclick="switchView('view-enrollment')" class="text-white font-bold hover:underline">Enroll Now</button>
+                </p>
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: LOCKED / PENDING PORTAL STATUS     -->
+        <!-- ========================================== -->
+        <section id="view-locked" class="portal-card p-6 space-y-4 hidden">
+            <div class="text-center flex flex-col items-center">
+                <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-blue-500/50 mb-2 shadow-md bg-slate-800">
+                    <img id="locked-profile-img" src="" alt="Profile" class="w-full h-full object-cover">
+                </div>
+                <h2 id="locked-student-name" class="text-lg font-bold text-white">Welcome, Student!</h2>
+                <p id="locked-student-grade" class="text-xs font-medium text-blue-400 mt-0.5">Officially Registered</p>
+            </div>
+
+            <div class="notice-box p-3.5 space-y-1.5 border-l-4 border-l-emerald-500">
+                <p class="text-xs text-gray-200 font-medium leading-relaxed">
+                    You have <span class="text-emerald-400 font-bold">SUCCESSFULLY ENROLLED</span> for the upcoming school year.
+                </p>
+                <p class="text-[11px] text-gray-400 leading-relaxed">
+                    Please note: Your Student Portal is currently locked and will only open when classes begin, as authorized by your Class Adviser.
+                </p>
+            </div>
+
+            <div id="student-status-banner" class="p-3 rounded-xl border bg-amber-950/40 border-amber-800/50 text-amber-300 text-center space-y-0.5">
+                <div class="flex items-center justify-center gap-1.5 font-bold text-[11px] tracking-wider uppercase">
+                    <i id="student-status-icon" class="fa-solid fa-lock"></i>
+                    <span id="student-status-text">CURRENT STATUS: OFFICIALLY ENROLLED</span>
+                </div>
+                <p id="student-status-sub" class="text-[10px] text-amber-200/70">Portal Access Pending Adviser Approval</p>
+            </div>
+
+            <div>
+                <button id="btn-open-dash" disabled onclick="switchView('view-dashboard')" class="w-full bg-gray-800 text-gray-500 font-bold py-3 px-4 rounded-xl cursor-not-allowed flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition-all duration-300">
+                    <i id="dash-btn-icon" class="fa-solid fa-lock text-xs"></i>
+                    <span>Open Student Dashboard</span>
+                </button>
+            </div>
+
+            <div class="text-center pt-1">
+                <button onclick="switchView('view-login')" class="text-xs text-gray-400 hover:text-white flex items-center justify-center gap-1 mx-auto">
+                    <i class="fa-solid fa-right-from-bracket text-xs"></i> Log Out
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: ACTIVE STUDENT DASHBOARD           -->
+        <!-- ========================================== -->
+        <section id="view-dashboard" class="portal-card p-6 space-y-4 hidden">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full overflow-hidden border border-emerald-500/50 shadow bg-slate-800 flex-shrink-0">
+                        <img id="dash-profile-img" src="" alt="Profile" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <span class="inline-block bg-emerald-900/60 border border-emerald-700/50 text-emerald-300 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider mb-0.5">Portal Unlocked</span>
+                        <h2 id="dash-name" class="text-sm font-bold text-white leading-tight">Student Name</h2>
+                        <p id="dash-details" class="text-[11px] text-gray-400">Grade Level</p>
+                    </div>
+                </div>
+                <button onclick="switchView('view-locked')" class="text-xs text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left"></i> Status</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5">
+                <div class="notice-box p-2.5">
+                    <p class="text-[9px] text-gray-400 uppercase font-semibold">Adviser Status</p>
+                    <p class="text-xs font-bold text-emerald-400 mt-0.5"><i class="fa-solid fa-check-circle"></i> Authorized</p>
+                </div>
+                <div class="notice-box p-2.5">
+                    <p class="text-[9px] text-gray-400 uppercase font-semibold">Classes Status</p>
+                    <p class="text-xs font-bold text-blue-400 mt-0.5"><i class="fa-solid fa-book-open"></i> In Session</p>
+                </div>
+            </div>
+
+            <div>
+                <h3 id="subject-schedule-title" class="text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">Enrolled Subjects Schedule</h3>
+                <div id="subject-list-container" class="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                    <!-- Dynamically populated based on student grade level -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- VIEW 5: TEACHER PORTAL LOGIN & PASSWORD    -->
+        <!-- ========================================== -->
+        <section id="view-teacher-login" class="portal-card p-6 space-y-4 hidden">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chalkboard-user text-amber-400"></i> Teacher Portal Login
+                    </h2>
+                    <p class="text-[11px] text-gray-400">Enter full name, grade level & password</p>
+                </div>
+                <button onclick="switchView('view-hub')" class="text-xs text-blue-400 hover:underline"><i class="fa-solid fa-house"></i> Hub</button>
+            </div>
+
+            <form onsubmit="handleTeacherLogin(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Teacher Full Name</label>
+                    <input type="text" id="teacher-name-input" required placeholder="e.g. Mr. Mark Santos" class="w-full dark-input p-3 rounded-xl text-xs">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Assigned Advisory Grade Level</label>
+                    <select id="teacher-grade-input" required class="w-full dark-input p-3 rounded-xl text-xs bg-slate-900">
+                        <option value="">Select Grade Level</option>
+                        <option value="Grade 7">Grade 7</option>
+                        <option value="Grade 8">Grade 8</option>
+                        <option value="Grade 9">Grade 9</option>
+                        <option value="Grade 10">Grade 10</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Personal Teacher Password</label>
+                    <div class="relative">
+                        <input type="password" id="teacher-pass-input" required placeholder="Create or enter password" class="w-full dark-input p-3 pr-10 rounded-xl text-xs">
+                        <button type="button" onclick="togglePasswordVisibility('teacher-pass-input', 't-pass-icon')" class="absolute right-3 top-3 text-gray-400 hover:text-white">
+                            <i id="t-pass-icon" class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                    <p class="text-[10px] text-gray-400 mt-1">Note: If first time, this password will be set for your teacher account.</p>
+                </div>
+
+                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 px-4 rounded-xl transition duration-200 shadow-md text-xs uppercase tracking-wider mt-2">
+                    Access Advisory List
+                </button>
+            </form>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- VIEW 6: TEACHER ADVISORY RECORDS DASHBOARD -->
+        <!-- ========================================== -->
+        <section id="view-teacher-dashboard" class="portal-card p-6 space-y-4 hidden">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <div>
+                    <h2 id="teacher-welcome-title" class="text-sm font-bold text-white">Teacher Dashboard</h2>
+                    <p id="teacher-welcome-subtitle" class="text-[11px] text-amber-400 font-medium">Advisory List</p>
+                </div>
+                <button onclick="switchView('view-teacher-login')" class="text-xs text-gray-400 hover:text-white"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-center">
+                <div class="notice-box p-2.5">
+                    <span class="text-[9px] text-gray-400 uppercase font-semibold">Advisory Enrolled</span>
+                    <p id="teacher-stat-total" class="text-sm font-bold text-white">0</p>
+                </div>
+                <div class="notice-box p-2.5">
+                    <span class="text-[9px] text-gray-400 uppercase font-semibold">Portals Unlocked</span>
+                    <p id="teacher-stat-unlocked" class="text-sm font-bold text-emerald-400">0</p>
+                </div>
+            </div>
+
+            <div class="space-y-2.5 max-h-[320px] overflow-y-auto pr-1" id="teacher-student-list">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- VIEW 7: PRINCIPAL PORTAL LOGIN & PASSWORD  -->
+        <!-- ========================================== -->
+        <section id="view-principal-login" class="portal-card p-6 space-y-4 hidden">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-purple-400"></i> Principal Login
+                    </h2>
+                    <p class="text-[11px] text-gray-400">Enter full name & personal password</p>
+                </div>
+                <button onclick="switchView('view-hub')" class="text-xs text-blue-400 hover:underline"><i class="fa-solid fa-house"></i> Hub</button>
+            </div>
+
+            <form onsubmit="handlePrincipalLogin(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Principal Full Name</label>
+                    <input type="text" id="principal-name-input" required placeholder="e.g. Dr. Maria Santos" class="w-full dark-input p-3 rounded-xl text-xs">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 mb-1">Personal Principal Password</label>
+                    <div class="relative">
+                        <input type="password" id="principal-pass-input" required placeholder="Enter or create your password" class="w-full dark-input p-3 pr-10 rounded-xl text-xs">
+                        <button type="button" onclick="togglePasswordVisibility('principal-pass-input', 'prin-pass-icon')" class="absolute right-3 top-3 text-gray-400 hover:text-white">
+                            <i id="prin-pass-icon" class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                    <p class="text-[10px] text-gray-400 mt-1">Note: First time setup will register your principal password.</p>
+                </div>
+
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 px-4 rounded-xl transition duration-200 shadow-md text-xs uppercase tracking-wider mt-2">
+                    Access Master Portal
+                </button>
+            </form>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- VIEW 8: PRINCIPAL MASTER LIST DASHBOARD    -->
+        <!-- ========================================== -->
+        <section id="view-principal-dashboard" class="portal-card p-6 space-y-4 hidden">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                <div>
+                    <h2 id="principal-welcome-title" class="text-sm font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-user-gear text-purple-400"></i> Principal Master List
+                    </h2>
+                    <p class="text-[11px] text-gray-400">Teachers & Advisory Rosters</p>
+                </div>
+                <button onclick="switchView('view-principal-login')" class="text-xs text-gray-400 hover:text-white"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-center">
+                <div class="notice-box p-2.5">
+                    <span class="text-[9px] text-gray-400 uppercase font-semibold">Registered Teachers</span>
+                    <p id="prin-stat-teachers" class="text-sm font-bold text-amber-400">0</p>
+                </div>
+                <div class="notice-box p-2.5">
+                    <span class="text-[9px] text-gray-400 uppercase font-semibold">Total Students</span>
+                    <p id="prin-stat-students" class="text-sm font-bold text-white">0</p>
+                </div>
+            </div>
+
+            <!-- Expandable Teachers & Students List -->
+            <div class="space-y-2.5 max-h-[320px] overflow-y-auto pr-1" id="principal-teacher-list">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER NAV BAR -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-slate-900/95 border-t border-slate-800 backdrop-blur-md p-3 z-40">
+        <div class="max-w-md mx-auto flex items-center justify-around text-xs">
+            <button onclick="switchView('view-hub')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-house text-sm"></i>
+                <span>Hub</span>
+            </button>
+            <button onclick="switchView('view-enrollment')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-file-pen text-sm"></i>
+                <span>Enroll</span>
+            </button>
+            <button onclick="switchView('view-login')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-right-to-bracket text-sm"></i>
+                <span>Student</span>
+            </button>
+            <button onclick="switchView('view-teacher-login')" class="flex flex-col items-center gap-1 text-amber-400 hover:text-amber-300 font-semibold">
+                <i class="fa-solid fa-chalkboard-user text-sm"></i>
+                <span>Teacher</span>
+            </button>
+            <button onclick="switchView('view-principal-login')" class="flex flex-col items-center gap-1 text-purple-400 hover:text-purple-300 font-semibold">
+                <i class="fa-solid fa-shield-halved text-sm"></i>
+                <span>Principal</span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- ENROLLMENT SUCCESS MODAL -->
+    <div id="success-modal" class="fixed inset-0 modal-overlay flex items-center justify-center p-4 z-50 hidden">
+        <div class="portal-card max-w-sm w-full p-6 text-center space-y-4 border-emerald-500/50">
+            <div class="w-12 h-12 bg-emerald-950 border border-emerald-700/60 text-emerald-400 rounded-full flex items-center justify-center text-xl mx-auto">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div>
+                <h3 class="text-base font-bold text-white">Enrollment Successful!</h3>
+                <p class="text-xs text-gray-300 mt-1">You are now <strong class="text-emerald-400">OFFICIALLY ENROLLED</strong> and your profile photo and record have been submitted.</p>
+            </div>
+            <button onclick="closeSuccessModal()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider shadow">
+                Proceed to Student Portal Login
+            </button>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // Junior High School Subjects Schedule Matrix
+        const juniorHighSubjects = {
+            "Grade 7": [
+                { name: "Mathematics 7", time: "7:30 AM - 8:30 AM", room: "Room 101" },
+                { name: "English 7", time: "8:30 AM - 9:30 AM", room: "Room 101" },
+                { name: "Science 7", time: "9:45 AM - 10:45 AM", room: "Science Lab 1" },
+                { name: "Filipino 7", time: "10:45 AM - 11:45 AM", room: "Room 101" },
+                { name: "Araling Panlipunan 7", time: "1:00 PM - 2:00 PM", room: "Room 101" },
+                { name: "TLE / T.V.E. 7", time: "2:00 PM - 3:00 PM", room: "Computer Lab" }
+            ],
+            "Grade 8": [
+                { name: "Algebra & Geometry (Math 8)", time: "7:30 AM - 8:30 AM", room: "Room 201" },
+                { name: "English 8", time: "8:30 AM - 9:30 AM", room: "Room 201" },
+                { name: "General Science (Science 8)", time: "9:45 AM - 10:45 AM", room: "Science Lab 2" },
+                { name: "Filipino 8", time: "10:45 AM - 11:45 AM", room: "Room 201" },
+                { name: "Araling Panlipunan 8", time: "1:00 PM - 2:00 PM", room: "Room 201" },
+                { name: "MAPEH 8", time: "2:00 PM - 3:00 PM", room: "Gymnasium" }
+            ],
+            "Grade 9": [
+                { name: "Advanced Algebra (Math 9)", time: "7:30 AM - 8:30 AM", room: "Room 301" },
+                { name: "English 9", time: "8:30 AM - 9:30 AM", room: "Room 301" },
+                { name: "Biology (Science 9)", time: "9:45 AM - 10:45 AM", room: "Biology Lab" },
+                { name: "Filipino 9", time: "10:45 AM - 11:45 AM", room: "Room 301" },
+                { name: "Economics (AP 9)", time: "1:00 PM - 2:00 PM", room: "Room 301" },
+                { name: "TLE / ICT 9", time: "2:00 PM - 3:00 PM", room: "Computer Lab" }
+            ],
+            "Grade 10": [
+                { name: "Trigonometry & Stats (Math 10)", time: "7:30 AM - 8:30 AM", room: "Room 401" },
+                { name: "English 10", time: "8:30 AM - 9:30 AM", room: "Room 401" },
+                { name: "Physics & Chemistry (Science 10)", time: "9:45 AM - 10:45 AM", room: "Chemistry Lab" },
+                { name: "Filipino 10", time: "10:45 AM - 11:45 AM", room: "Room 401" },
+                { name: "World History (AP 10)", time: "1:00 PM - 2:00 PM", room: "Room 401" },
+                { name: "Values Education / ESP 10", time: "2:00 PM - 3:00 PM", room: "Room 401" }
+            ]
+        };
+
+        function getStudents() {
+            const data = localStorage.getItem('tcci_enrolled_students');
+            if (!data) {
+                const initial = [
+                    { id: 'STU-001', name: 'Juan Dela Cruz', lrn: '123456789012', email: 'juandelacruz@gmail.com', grade: 'Grade 7', contact: '09123456789', guardian: 'Maria Dela Cruz', photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', isUnlocked: false, dateEnrolled: new Date().toLocaleDateString() },
+                    { id: 'STU-002', name: 'Ana Reyes', lrn: '987654321012', email: 'anareyes@gmail.com', grade: 'Grade 8', contact: '09987654321', guardian: 'Pedro Reyes', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150', isUnlocked: false, dateEnrolled: new Date().toLocaleDateString() }
+                ];
+                localStorage.setItem('tcci_enrolled_students', JSON.stringify(initial));
+                return initial;
+            }
+            return JSON.parse(data);
+        }
+
+        // Handle Visual Selection for Grade 7 to 10 Boxes
+        function selectGradeCard(grade) {
+            const cards = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'];
+            cards.forEach(g => {
+                const cardEl = document.getElementById(`card-${g.toLowerCase().replace(' ', '')}`);
+                if (cardEl) {
+                    cardEl.classList.remove('selected');
+                }
+            });
+
+            const targetCard = document.getElementById(`card-${grade.toLowerCase().replace(' ', '')}`);
+            if (targetCard) {
+                targetCard.classList.add('selected');
+            }
+
+            document.getElementById('selected-grade-input').value = grade;
+
+            // Toggle Grade 7 Requirements
+            const reqSection = document.getElementById('grade-7-requirements-section');
+            const reqInput = document.getElementById('grade7-req-photos');
+
+            if (grade === 'Grade 7') {
+                reqSection.classList.remove('hidden');
+                reqInput.required = true;
+            } else {
+                reqSection.classList.add('hidden');
+                reqInput.required = false;
+            }
+        }
+
+        function switchView(viewId) {
+            const views = [
+                'view-hub', 'view-enrollment', 'view-login', 'view-locked',
+                'view-dashboard', 'view-teacher-login', 'view-teacher-dashboard',
+                'view-principal-login', 'view-principal-dashboard'
+            ];
+            views.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            const target = document.getElementById(viewId);
+            if (target) {
+                target.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        let temporaryStudentData = null;
+
+        function handleEnrollmentSubmit(event) {
+            event.preventDefault();
+            const grade = document.getElementById('selected-grade-input').value;
+
+            if (!grade) {
+                alert("Please select a Grade Level (Grade 7, 8, 9, or 10) to proceed.");
+                return;
+            }
+
+            const photoInput = document.getElementById('student-photo');
+            const name = document.getElementById('student-name').value;
+            const lrn = document.getElementById('student-lrn').value;
+            const email = document.getElementById('student-email').value;
+            const contact = document.getElementById('student-contact').value;
+            const guardian = document.getElementById('parent-contact').value;
+
+            let photoUrl = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';
+            if (photoInput.files && photoInput.files[0]) {
+                photoUrl = URL.createObjectURL(photoInput.files[0]);
+            }
+
+            temporaryStudentData = {
+                id: 'STU-' + Math.floor(100 + Math.random() * 900),
+                name, lrn, email, grade, contact, guardian,
+                photo: photoUrl,
+                isUnlocked: false,
+                dateEnrolled: new Date().toLocaleDateString()
+            };
+
+            document.getElementById('success-modal').classList.remove('hidden');
+        }
+
+        function closeSuccessModal() {
+            if (temporaryStudentData) {
+                const students = getStudents();
+                students.push(temporaryStudentData);
+                localStorage.setItem('tcci_enrolled_students', JSON.stringify(students));
+                temporaryStudentData = null;
+            }
+            document.getElementById('success-modal').classList.add('hidden');
+            document.getElementById('enrollment-form').reset();
+
+            // Reset Cards
+            const cards = ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'];
+            cards.forEach(g => {
+                const cardEl = document.getElementById(`card-${g.toLowerCase().replace(' ', '')}`);
+                if (cardEl) cardEl.classList.remove('selected');
+            });
+            document.getElementById('grade-7-requirements-section').classList.add('hidden');
+
+            switchView('view-login');
+        }
+
+        let currentActiveStudent = null;
+
+        function handleLoginSubmit(event) {
+            event.preventDefault();
+            const inputVal = document.getElementById('login-email').value.trim().toLowerCase();
+            const students = getStudents();
+
+            const student = students.find(s => s.email.toLowerCase() === inputVal || s.lrn === inputVal);
+
+            if (!student) {
+                alert('Student record not found. Please check your email or LRN, or enroll first.');
+                return;
+            }
+
+            currentActiveStudent = student;
+
+            // Populate Student Profile Views
+            document.getElementById('locked-profile-img').src = student.photo;
+            document.getElementById('locked-student-name').innerText = `Welcome, ${student.name}!`;
+            document.getElementById('locked-student-grade').innerText = `${student.grade} - LRN: ${student.lrn}`;
+
+            document.getElementById('dash-profile-img').src = student.photo;
+            document.getElementById('dash-name').innerText = student.name;
+            document.getElementById('dash-details').innerText = `${student.grade} • LRN: ${student.lrn}`;
+
+            // Populate Grade Schedule
+            const scheduleContainer = document.getElementById('subject-list-container');
+            scheduleContainer.innerHTML = '';
+            const subjects = juniorHighSubjects[student.grade] || juniorHighSubjects["Grade 7"];
+
+            subjects.forEach(sub => {
+                scheduleContainer.innerHTML += `
+                    <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800 flex items-center justify-between text-xs">
+                        <div><p class="font-semibold text-white">${sub.name}</p><p class="text-[10px] text-gray-400">${sub.time}</p></div>
+                        <span class="text-[10px] bg-blue-950 text-blue-300 border border-blue-800/50 px-2 py-0.5 rounded">${sub.room}</span>
+                    </div>
+                `;
+            });
+
+            const statusBanner = document.getElementById('student-status-banner');
+            const statusIcon = document.getElementById('student-status-icon');
+            const statusText = document.getElementById('student-status-text');
+            const statusSub = document.getElementById('student-status-sub');
+            const btnOpenDash = document.getElementById('btn-open-dash');
+            const dashBtnIcon = document.getElementById('dash-btn-icon');
+
+            if (student.isUnlocked) {
+                statusBanner.className = "p-3 rounded-xl border bg-emerald-950/40 border-emerald-800/50 text-emerald-300 text-center space-y-0.5";
+                statusIcon.className = "fa-solid fa-lock-open";
+                statusText.innerText = "PORTAL UNLOCKED BY ADVISER";
+                statusSub.innerText = "You can now access your dashboard and schedules.";
+
+                btnOpenDash.disabled = false;
+                btnOpenDash.className = "w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-900/30 flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer";
+                dashBtnIcon.className = "fa-solid fa-arrow-right text-xs";
+            } else {
+                statusBanner.className = "p-3 rounded-xl border bg-amber-950/40 border-amber-800/50 text-amber-300 text-center space-y-0.5";
+                statusIcon.className = "fa-solid fa-lock";
+                statusText.innerText = "CURRENT STATUS: OFFICIALLY ENROLLED";
+                statusSub.innerText = "Portal Access Pending Adviser Approval";
+
+                btnOpenDash.disabled = true;
+                btnOpenDash.className = "w-full bg-gray-800 text-gray-500 font-bold py-3 px-4 rounded-xl cursor-not-allowed flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition-all duration-300";
+                dashBtnIcon.className = "fa-solid fa-lock text-xs";
+            }
+
+            switchView('view-locked');
+        }
+
+        let currentActiveTeacher = null;
+
+        function handleTeacherLogin(event) {
+            event.preventDefault();
+            const name = document.getElementById('teacher-name-input').value.trim();
+            const grade = document.getElementById('teacher-grade-input').value;
+
+            currentActiveTeacher = { name, grade };
+            document.getElementById('teacher-welcome-title').innerText = `Adviser: ${name}`;
+            document.getElementById('teacher-welcome-subtitle').innerText = `Advisory Class: ${grade}`;
+
+            renderTeacherStudentList();
+            switchView('view-teacher-dashboard');
+        }
+
+        function renderTeacherStudentList() {
+            const students = getStudents();
+            const advisoryStudents = students.filter(s => s.grade === currentActiveTeacher.grade);
+
+            document.getElementById('teacher-stat-total').innerText = advisoryStudents.length;
+            const unlockedCount = advisoryStudents.filter(s => s.isUnlocked).length;
+            document.getElementById('teacher-stat-unlocked').innerText = unlockedCount;
+
+            const listContainer = document.getElementById('teacher-student-list');
+            listContainer.innerHTML = '';
+
+            if (advisoryStudents.length === 0) {
+                listContainer.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">No enrolled students found for ${currentActiveTeacher.grade}.</p>`;
+                return;
+            }
+
+            advisoryStudents.forEach(stu => {
+                listContainer.innerHTML += `
+                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-2.5">
+                            <img src="${stu.photo}" class="w-9 h-9 rounded-full object-cover border border-gray-700">
+                            <div>
+                                <p class="font-bold text-white">${stu.name}</p>
+                                <p class="text-[10px] text-gray-400">LRN: ${stu.lrn} • ${stu.email}</p>
+                            </div>
+                        </div>
+                        <button onclick="toggleStudentPortalLock('${stu.email}')" class="px-3 py-1.5 rounded-lg font-semibold text-[10px] uppercase transition ${stu.isUnlocked ? 'bg-rose-950 text-rose-300 border border-rose-800 hover:bg-rose-900' : 'bg-emerald-950 text-emerald-300 border border-emerald-800 hover:bg-emerald-900'}">
+                            ${stu.isUnlocked ? '<i class="fa-solid fa-lock"></i> Lock' : '<i class="fa-solid fa-lock-open"></i> Unlock'}
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function toggleStudentPortalLock(email) {
+            let students = getStudents();
+            students = students.map(s => {
+                if (s.email.toLowerCase() === email.toLowerCase()) {
+                    s.isUnlocked = !s.isUnlocked;
+                }
+                return s;
+            });
+            localStorage.setItem('tcci_enrolled_students', JSON.stringify(students));
+            renderTeacherStudentList();
+        }
+
+        function handlePrincipalLogin(event) {
+            event.preventDefault();
+            const name = document.getElementById('principal-name-input').value.trim();
+            document.getElementById('principal-welcome-title').innerHTML = `<i class="fa-solid fa-user-gear text-purple-400"></i> Principal: ${name}`;
+
+            renderPrincipalMasterList();
+            switchView('view-principal-dashboard');
+        }
+
+        function renderPrincipalMasterList() {
+            const students = getStudents();
+            document.getElementById('prin-stat-students').innerText = students.length;
+            document.getElementById('prin-stat-teachers').innerText = "4 (Grade 7 - 10)";
+
+            const listContainer = document.getElementById('principal-teacher-list');
+            listContainer.innerHTML = '';
+
+            const gradeLevels = ["Grade 7", "Grade 8", "Grade 9", "Grade 10"];
+            gradeLevels.forEach(grade => {
+                const gStudents = students.filter(s => s.grade === grade);
+                listContainer.innerHTML += `
+                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2 text-xs">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                            <span class="font-bold text-amber-400"><i class="fa-solid fa-chalkboard"></i> ${grade} Advisory</span>
+                            <span class="text-[10px] bg-slate-800 text-gray-300 px-2 py-0.5 rounded-full">${gStudents.length} Students</span>
+                        </div>
+                        <div class="space-y-1">
+                            ${gStudents.length > 0 ? gStudents.map(s => `
+                                <div class="flex items-center justify-between text-[11px] text-gray-300 px-1 py-0.5">
+                                    <span>${s.name} (${s.lrn})</span>
+                                    <span class="${s.isUnlocked ? 'text-emerald-400 font-semibold' : 'text-amber-500'}">${s.isUnlocked ? 'Unlocked' : 'Locked'}</span>
+                                </div>
+                            `).join('') : '<p class="text-[10px] text-gray-500 italic px-1">No students enrolled in this level yet.</p>'}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
